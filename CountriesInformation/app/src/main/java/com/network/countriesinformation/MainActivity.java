@@ -30,12 +30,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         getAllCountries();
     }
 
-    private void getAllCountries() {
-        ContentValues callParams = new ContentValues();
-        callParams.put("username","hí hí");
-        serviceHandler = new ServiceHandler(MainActivity.this, mRecyclerView, callParams,mAdapter);
-        serviceHandler.execute(ServiceHandler.DISPLAY);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -88,5 +82,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+    }
+
+    private void getAllCountries() {
+        ContentValues callParams = new ContentValues();
+        callParams.put("username","hí hí");
+        serviceHandler = new ServiceHandler(MainActivity.this, mRecyclerView, callParams, mAdapter);
+        serviceHandler.execute(ServiceHandler.DISPLAY);
     }
 }

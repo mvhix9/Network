@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Countries Information</string>
     <string name="search_hint">Search here...</string>
+    <string name="countryCode">Country code</string>
+    <string name="countryName">Country name</string>
+    <string name="continentName">Continent name</string>
+    <string name="capital">Capital</string>
+    <string name="population">Population</string>
+    <string name="area">Area (square km)</string>
+    <string name="currencyCode">Currency code</string>
 </resources>

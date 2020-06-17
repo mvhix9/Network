@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CustomAdapter  extends RecyclerView.Adapter<CustomAdapter.DataViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.DataViewHolder> {
 
     Context mContext;
     List<Country> mCountries;
@@ -30,16 +30,16 @@ public class CustomAdapter  extends RecyclerView.Adapter<CustomAdapter.DataViewH
     @NonNull
     @Override
     public DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.country_item,parent,false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.country_item, parent,false);
         return new DataViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         final Country country = mCountries.get(position);
-        holder.textName.setText(country.getmName());
-        String url="https://img.geonames.org/flags/l/"+country.getmCode().toLowerCase()+".gif";
-        Picasso.with(this.mContext).load(url).resize(50,50).into(holder.imageFlag);
+        holder.txtCountryName.setText(country.getmName());
+        String url = "https://img.geonames.org/flags/l/" + country.getmCode().toLowerCase() + ".gif";
+        Picasso.with(this.mContext).load(url).resize(50,50).into(holder.imgFlag);
     }
 
     @Override
@@ -47,14 +47,14 @@ public class CustomAdapter  extends RecyclerView.Adapter<CustomAdapter.DataViewH
         return mCountries == null? 0 : mCountries.size();
     }
 
-    public static class DataViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageFlag;
-        private TextView textName;
+    public class DataViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imgFlag;
+        private TextView txtCountryName;
 
         public DataViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageFlag = (ImageView) itemView.findViewById(R.id.image_flag);
-            textName = (TextView) itemView.findViewById(R.id.txtview_country_name);
+            imgFlag = (ImageView) itemView.findViewById(R.id.imgFlag);
+            txtCountryName = (TextView) itemView.findViewById(R.id.txtCountryName);
         }
     }
 }

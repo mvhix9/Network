@@ -19,11 +19,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ServiceHandler extends AsyncTask<String,Void, ArrayList> {
+public class ServiceHandler extends AsyncTask<String, Void, ArrayList> {
     String URL_GETCOUNTRIES = "http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&username=aporter&style=full";
     ContentValues callParams;
 
-    ProgressDialog Dialog;
+    ProgressDialog dialog;
     RecyclerView recyclerView;
     ServiceCaller serviceCaller = new ServiceCaller();
 
@@ -31,7 +31,7 @@ public class ServiceHandler extends AsyncTask<String,Void, ArrayList> {
     ArrayList<Country> countries;
     CustomAdapter adapter;
 
-    public ServiceHandler(Context context, RecyclerView recyclerView, ContentValues callParams,CustomAdapter customAdapter) {
+    public ServiceHandler(Context context, RecyclerView recyclerView, ContentValues callParams, CustomAdapter customAdapter) {
         this.context = context;
         this.callParams = callParams;
         this.recyclerView = recyclerView;
@@ -46,12 +46,11 @@ public class ServiceHandler extends AsyncTask<String,Void, ArrayList> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Dialog = new ProgressDialog(context);
-        Dialog.setMessage("Proccesing..");
-        Dialog.setCancelable(false);
-        Dialog.show();
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Proccesing...");
+        dialog.setCancelable(false);
+        dialog.show();
     }
-
 
     @Override
     protected ArrayList doInBackground(String... strings) {
@@ -66,7 +65,10 @@ public class ServiceHandler extends AsyncTask<String,Void, ArrayList> {
                             JSONArray accounts = jsonObject.getJSONArray("geonames");
                             for (int i = 0; i < accounts.length(); i++) {
                                 JSONObject object = (JSONObject) accounts.get(i);
-                                Country country = new Country(object.getString("countryName"), Double.parseDouble(object.getString("population")), Double.parseDouble(object.getString("areaInSqKm")), object.getString("countryCode"));
+                                Country country = new Country(object.getString("countryName"),
+                                        Double.parseDouble(object.getString("population")),
+                                        Double.parseDouble(object.getString("areaInSqKm")),
+                                        object.getString("countryCode"));
                                 countries.add(country);
                             }
                         } else {
@@ -94,13 +96,13 @@ public class ServiceHandler extends AsyncTask<String,Void, ArrayList> {
     @Override
     protected void onPostExecute(ArrayList ret) {
         super.onPostExecute(ret);
-        if (Dialog.isShowing())
-            Dialog.dismiss();
+        if (dialog.isShowing())
+            dialog.dismiss();
         if (ret == null)
-            Toast.makeText(context, "Lỗi - Refresh lại",
+            Toast.makeText(context, "Error - Refresh again",
                     Toast.LENGTH_SHORT).show();
         loadData();
-        Log.i("hien",countries.toString());
+        Log.i("hien", countries.toString());
     }
 
     private void loadData() {
@@ -112,9 +114,10 @@ public class ServiceHandler extends AsyncTask<String,Void, ArrayList> {
 //            Country country = countries.get(i);
 //            data.add(country.countryCode + "-" + country.countryName + ": " + country.countryPopulation);
 //        }
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         // Tạo adapter cho listivew
-         adapter = new CustomAdapter(context, countries);
+        adapter = new CustomAdapter(context, countries);
         // Gắn adapter cho listview
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
