@@ -65,7 +65,7 @@ public class ServiceCaller {
                 return sb.toString();
             }
             else {
-                Country country = new Country(httpConn.getResponseMessage(), 0,resCode,"20000.0"); //deo hieu lam
+                Country country = new Country(httpConn.getResponseMessage(), 0,resCode,"20000.0","0","0","0"); //deo hieu lam
                 return country.toJSON();
             }
 

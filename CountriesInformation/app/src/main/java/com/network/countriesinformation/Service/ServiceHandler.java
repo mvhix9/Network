@@ -7,11 +7,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.network.countriesinformation.Adapter.CustomAdapter;
 import com.network.countriesinformation.Entity.Country;
+import com.network.countriesinformation.Interface.MainActivityInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,22 +17,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ServiceHandler extends AsyncTask<String, Void, ArrayList> {
-    String URL_GETCOUNTRIES = "http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&username=aporter&style=full";
-    ContentValues callParams;
 
-    ProgressDialog dialog;
-    RecyclerView recyclerView;
-    ServiceCaller serviceCaller = new ServiceCaller();
+    // mấy cái biến như này thì phải để private có phải ko ghi nó cũng auto private ko , ko
+    private String URL_GETCOUNTRIES = "http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&username=aporter&style=full";
+    private ContentValues callParams;
 
-    Context context;
-    ArrayList<Country> countries;
-    CustomAdapter adapter;
+    private ProgressDialog dialog;
+    private ServiceCaller serviceCaller = new ServiceCaller();
 
-    public ServiceHandler(Context context, RecyclerView recyclerView, ContentValues callParams, CustomAdapter customAdapter) {
+    private Context context;
+    private ArrayList<Country> countries;
+    private MainActivityInterface mInterface;
+
+    public ServiceHandler(Context context, MainActivityInterface mainActivityInterface, ContentValues callParams) {
         this.context = context;
         this.callParams = callParams;
-        this.recyclerView = recyclerView;
-        this.adapter = customAdapter;
+        this.mInterface = mainActivityInterface;
     }
 
     public static final String DISPLAY = "display";
@@ -68,12 +65,12 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList> {
                                 Country country = new Country(object.getString("countryName"),
                                         Double.parseDouble(object.getString("population")),
                                         Double.parseDouble(object.getString("areaInSqKm")),
-                                        object.getString("countryCode"));
+                                        object.getString("countryCode"),object.getString("continentName"),object.getString("currencyCode"),object.getString("capital"));
                                 countries.add(country);
                             }
                         } else {
                             Log.d("JSON Data", "JSON data's format is incorrect!");
-                            Country country = new Country("JSON data's format is incorrect!", 0, 0, "0");
+                            Country country = new Country("JSON data's format is incorrect!", 0, 0, "0","0","0","0");
                             countries.add(country);
                         }
                     } catch (JSONException e) {
@@ -102,25 +99,13 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList> {
             Toast.makeText(context, "Error - Refresh again",
                     Toast.LENGTH_SHORT).show();
         loadData();
-        Log.i("hien", countries.toString());
     }
 
     private void loadData() {
         if (countries == null) {
             return;
         }
-//        List<String> data = new ArrayList<String>();
-//        for (int i = 0; i < countries.size(); i++) {
-//            Country country = countries.get(i);
-//            data.add(country.countryCode + "-" + country.countryName + ": " + country.countryPopulation);
-//        }
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        // Tạo adapter cho listivew
-        adapter = new CustomAdapter(context, countries);
-        // Gắn adapter cho listview
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        // }
+        Log.i("Hien","loadData");
+        mInterface.setNewAdaterCountryList(countries);
     }
 }
