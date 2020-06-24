@@ -106,6 +106,6 @@ public class ServiceHandler extends AsyncTask<String, Void, ArrayList> {
             return;
         }
         Log.i("Hien","loadData");
-        mInterface.setNewAdaterCountryList(countries);
+        mInterface.setNewAdapterCountryList(countries);
     }
 }

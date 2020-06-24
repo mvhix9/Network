@@ -5,5 +5,5 @@ import com.network.countriesinformation.Entity.Country;
 import java.util.List;
 
 public interface MainActivityInterface {
-    void setNewAdaterCountryList(List<Country> list);
+    void setNewAdapterCountryList(List<Country> list);
 }

@@ -1,155 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <!-- Flag image -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgFlag"
-            android:layout_width="200dp"
-            android:layout_height="120dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_launcher_foreground"
-            android:scaleType="fitCenter">
-        </ImageView>
+        <!-- Flag image -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imgFlag"
+                android:layout_width="200dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_launcher_foreground"
+                android:scaleType="fitCenter">
+            </ImageView>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detailed information"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:background="#e5e5e5"
+            android:textColor="#000000" />
+
+        <!-- Detailed info -->
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:stretchColumns="*"
+            android:shrinkColumns="1">
+
+            <!-- Country code -->
+            <TableRow
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:text="@string/countryCode"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtCountryCode"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+
+            <!-- Country name -->
+            <TableRow
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:text="@string/countryName"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/txtCountryName"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+
+            <!-- Continent name -->
+            <TableRow
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:text="@string/continentName"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/txtContinentName"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+
+            <!-- Capital -->
+            <TableRow
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:text="@string/capital"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/txtCapital"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+
+            <!-- Area -->
+            <TableRow
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:text="@string/area"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/txtArea"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+
+            <!-- Currency code -->
+            <TableRow
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:text="@string/currencyCode"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/txtCurrencyCode"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+            <TableRow
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:text="@string/population"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/txtPopulation"
+                    android:text="test"
+                    android:textSize="18dp"/>
+            </TableRow>
+        </TableLayout>
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Detailed information"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:background="#e5e5e5"
-        android:textColor="#000000" />
-
-    <!-- Detailed info -->
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:stretchColumns="*"
-        android:shrinkColumns="1">
-
-        <!-- Country code -->
-        <TableRow
-            android:layout_marginTop="5dp">
-            <TextView
-                android:text="@string/countryCode"
-                android:textColor="#000000"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtCountryCode"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-
-        <!-- Country name -->
-        <TableRow
-            android:layout_marginTop="5dp"
-            >
-            <TextView
-                android:text="@string/countryName"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/txtCountryName"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-
-        <!-- Continent name -->
-        <TableRow
-            android:layout_marginTop="5dp"
-            >
-            <TextView
-                android:text="@string/continentName"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/txtContinentName"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-
-        <!-- Capital -->
-        <TableRow
-            android:layout_marginTop="5dp"
-            >
-            <TextView
-                android:text="@string/capital"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/txtCapital"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-
-        <!-- Area -->
-        <TableRow
-            android:layout_marginTop="5dp"
-            >
-            <TextView
-                android:text="@string/area"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/txtArea"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-
-        <!-- Currency code -->
-        <TableRow
-            android:layout_marginTop="5dp"
-            >
-            <TextView
-                android:text="@string/currencyCode"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/txtCurrencyCode"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="5dp"
-            >
-            <TextView
-                android:text="@string/population"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/txtPopulation"
-                android:text="test"
-                android:textSize="18dp"/>
-        </TableRow>
-    </TableLayout>
-
-</LinearLayout>
+</ScrollView>

@@ -57,12 +57,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.DataViewHo
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         final Country country = mCountries.get(position);
         holder.txtCountryName.setText(country.getmName());
-        final String url = "https://img.geonames.org/flags/l/" + country.getmCode().toLowerCase() + ".gif";
-        Picasso.with(this.mContext).load(url).resize(50,50).into(holder.imgFlag);
+        final String imgLink = "https://img.geonames.org/flags/l/" + country.getmCode().toLowerCase() + ".gif";
+        Picasso.with(this.mContext).load(imgLink).resize(50,50).into(holder.imgFlag);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDiaLog(country,url);
+                showDiaLog(country, imgLink);
             }
         });
     }
@@ -71,21 +71,27 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.DataViewHo
     {
         Dialog dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.country_detailed_info);
-        ImageView imgFlagDialog = dialog.findViewById(R.id.imgFlag);
+
+        // mapping views
+        ImageView imgFlag = dialog.findViewById(R.id.imgFlag);
         TextView txtCountryCode = dialog.findViewById(R.id.txtCountryCode);
         TextView txtCountryName = dialog.findViewById(R.id.txtCountryName);
+        TextView txtContinentName = dialog.findViewById(R.id.txtContinentName);
         TextView txtArea = dialog.findViewById(R.id.txtArea);
         TextView txtCurrencyCode = dialog.findViewById(R.id.txtCurrencyCode);
         TextView txtCapital = dialog.findViewById(R.id.txtCapital);
         TextView txtPopulation = dialog.findViewById(R.id.txtPopulation);
 
-        Picasso.with(mContext).load(url).resize(50,50).into(imgFlagDialog);
+        // set views
+        Picasso.with(mContext).load(url).resize(200,120).into(imgFlag);
         txtCountryCode.setText(country.getmCode());
         txtCountryName.setText(country.getmName());
+        txtContinentName.setText(country.getmContinentName());
         txtCapital.setText(country.getmCapital());
         txtArea.setText(String.valueOf(country.getmArea()));
         txtCurrencyCode.setText(country.getmCurrencyCode());
         txtPopulation.setText(String.valueOf(country.getmPopulation()));
+
         dialog.show();
     }
 
@@ -94,7 +100,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.DataViewHo
         return mCountries == null? 0 : mCountries.size();
     }
 
-    public int getSize(){
+    public int getSize() {
         return this.mOriginalList.size();
     }
 

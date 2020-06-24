@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private ServiceHandler serviceHandler;
 
-    private List<Country> mAllCountry = new ArrayList<>();
+    private List<Country> mAllCountries;
     private static sortType mSortType;
     private static boolean flagForSort = false;
     private static String mSearch;
@@ -52,17 +52,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Log.i("Hien", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        inItView();
+        initView();
         if (savedInstanceState == null)
         {
             getAllCountries();
         }
     }
 
-    private void inItView()
+    private void initView()
     {
-        if (mAllCountry == null)
-            mAllCountry = new ArrayList<>();
+        if (mAllCountries == null)
+            mAllCountries = new ArrayList<>();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -98,13 +98,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onCreateOptionsMenu(menu);
         Log.i("Hien","onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.options_menu, menu);
+
         // searchview on action bar
         SearchManager searchManager = (SearchManager) getSystemService(getApplicationContext().SEARCH_SERVICE);
         SearchView searchView       = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
+
+        // search text
+        // if text not empty
         if (!TextUtils.isEmpty(mSearch)) {
+            // set the text in SearchView's input
+            // uses for storing the text if the rotate happens
             searchView.setQuery(mSearch, false);
             searchView.clearFocus();
         }
@@ -116,45 +122,44 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         switch(item.getItemId()){
             case R.id.sortAsc:
                 mSortType = sortType.ASC_COUNTRY;
-                sortCountry();
+                sortCountries();
                 return true;
             case R.id.sortDes:
                 mSortType = sortType.DESC_COUNTRY;
-                sortCountry();
+                sortCountries();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    // TO-DO
+    
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
-
-    // TO-DO
+    
     @Override
     public boolean onQueryTextChange(String newText) {
         mAdapter.filter(newText);
         mSearch = newText;
         if(flagForSort)
         {
-            sortCountry();
+            sortCountries();
         }
         return false;
     }
-
-
+    
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         Log.i("Hien", "onSaveInstanceState called");
-        ArrayList<Country> allCountry = (ArrayList<Country>) mAdapter.getAllItem(); // all countries not country
-        ArrayList<Country> presentationCountry = (ArrayList<Country>) mAdapter.getAllPresentationItem(); // presentationCountries
-        outState.putParcelableArrayList("allCountry", allCountry);
-        outState.putParcelableArrayList("presentationCountry", presentationCountry);
-        outState.putBoolean("Sort", flagForSort);
-        outState.putSerializable("SortType", mSortType);
+
+        // put all into bundle
+        ArrayList<Country> allCountries = (ArrayList<Country>) mAdapter.getAllItem();
+        ArrayList<Country> presentationCountries = (ArrayList<Country>) mAdapter.getAllPresentationItem();
+        outState.putParcelableArrayList("allCountries", allCountries);
+        outState.putParcelableArrayList("presentationCountries", presentationCountries);
+        outState.putBoolean("sortFlag", flagForSort);
+        outState.putSerializable("sortType", mSortType);
         if(!TextUtils.isEmpty(mSearch))
         {
             outState.putString("search", mSearch);
@@ -172,14 +177,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.i("Hien", "onRestoreInstanceState called");
-        boolean isSorted = savedInstanceState.getBoolean("Sort");
+
+        // get from bundle
+        boolean isSorted = savedInstanceState.getBoolean("sortFlag");
         String search = savedInstanceState.getString("search");
-        mAllCountry = savedInstanceState.getParcelableArrayList("allCountry");
-        mAdapter = new CustomAdapter(this,mAllCountry);
-        List<Country> presentation = savedInstanceState.getParcelableArrayList("presentationCountry");
-        mAdapter = new CustomAdapter(this, presentation,mAllCountry);
+        mAllCountries = savedInstanceState.getParcelableArrayList("allCountries");
+        List<Country> presentation = savedInstanceState.getParcelableArrayList("presentationCountries");
+
+        mAdapter = new CustomAdapter(this, presentation, mAllCountries);
         mRecyclerView.setAdapter(mAdapter);
         mSearch = search;
+    }
+
+    @Override
+    public void setNewAdapterCountryList(List<Country> list) {
+        Log.i("Hien", "setNewAdapterCountryList");
+        mAllCountries = list;
+        mAdapter = new CustomAdapter(this, mAllCountries);
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void getAllCountries() {
@@ -188,30 +204,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         {
             Log.i("Hien", "Internet");
             ContentValues callParams = new ContentValues();
-            callParams.put("username","wtf");
+            callParams.put("username","hihi");
             serviceHandler = new ServiceHandler(MainActivity.this, this, callParams);
             serviceHandler.execute(ServiceHandler.DISPLAY);
         }
         else
         {
             Log.i("Hien", "Non-Internet");
-            mAllCountry = new ArrayList<>();
-            mAdapter = new CustomAdapter(this,mAllCountry);
+            mAllCountries = new ArrayList<>();
+            mAdapter = new CustomAdapter(this, mAllCountries);
             mRecyclerView.setAdapter(mAdapter);
-            Toast.makeText(this, "Không có kết nối internet" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please check your Internet connection" , Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    public void setNewAdaterCountryList(List<Country> list) {
-        Log.i("Hien", "setNewAdapterCountryList");
-        mAllCountry = list;
-        mAdapter = new CustomAdapter(this, mAllCountry);
-        mAdapter.notifyDataSetChanged();
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void sortCountry()
+    
+    private void sortCountries()
     {
         flagForSort = true;
         Log.i("Hien","sortCountry");
