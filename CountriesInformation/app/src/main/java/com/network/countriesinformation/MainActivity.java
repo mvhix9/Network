@@ -2,12 +2,17 @@ package com.network.countriesinformation;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,30 +39,57 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CustomAdapter mAdapter;
+
     private ServiceHandler serviceHandler;
+
     private List<Country> mAllCountry = new ArrayList<>();
     private static sortType mSortType;
     private static boolean flagForSort = false;
     private static String mSearch;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         Log.i("Hien", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        inItView();
+        if (savedInstanceState == null)
+        {
+            getAllCountries();
+        }
+    }
+
+    private void inItView()
+    {
         if (mAllCountry == null)
             mAllCountry = new ArrayList<>();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                },2000);
+                getAllCountries();
+            }
+        });
+    }
 
-        if (savedInstanceState != null)
-        {
-
-        }
-        else
-        {
-            getAllCountries();
+    protected boolean checkInternetConnection(){
+        Log.i("Hien" , "checkInternetConnection");
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo!= null && networkInfo.isAvailable() && networkInfo.isConnected())
+            return true;
+        else{
+            return false;
         }
     }
 
@@ -73,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
         if (!TextUtils.isEmpty(mSearch)) {
-
             searchView.setQuery(mSearch, false);
             searchView.clearFocus();
         }
@@ -149,24 +180,26 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         mAdapter = new CustomAdapter(this, presentation,mAllCountry);
         mRecyclerView.setAdapter(mAdapter);
         mSearch = search;
-//        if(isSorted)
-//        {
-//            mSortType =  (sortType) savedInstanceState.getSerializable("SortType");
-//            sortCountry();
-//        }
-//        if(!TextUtils.isEmpty(search))
-//        {
-//            mAdapter.filter(search);
-//            mRecyclerView.setAdapter(mAdapter);
-//        }
     }
 
     private void getAllCountries() {
         Log.i("Hien", "getAllCountries");
-        ContentValues callParams = new ContentValues();
-        callParams.put("username","wtf");
-        serviceHandler = new ServiceHandler(MainActivity.this, this, callParams);
-        serviceHandler.execute(ServiceHandler.DISPLAY);
+        if(checkInternetConnection())
+        {
+            Log.i("Hien", "Internet");
+            ContentValues callParams = new ContentValues();
+            callParams.put("username","wtf");
+            serviceHandler = new ServiceHandler(MainActivity.this, this, callParams);
+            serviceHandler.execute(ServiceHandler.DISPLAY);
+        }
+        else
+        {
+            Log.i("Hien", "Non-Internet");
+            mAllCountry = new ArrayList<>();
+            mAdapter = new CustomAdapter(this,mAllCountry);
+            mRecyclerView.setAdapter(mAdapter);
+            Toast.makeText(this, "Không có kết nối internet" , Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
