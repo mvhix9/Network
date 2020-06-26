@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class ServiceHandler extends AsyncTask<String, Void, ArrayList> {
 
-    // mấy cái biến như này thì phải để private có phải ko ghi nó cũng auto private ko , ko
     private String URL_GETCOUNTRIES = "http://api.geonames.org/countryInfoJSON?formatted=true&lang=it&username=aporter&style=full";
     private ContentValues callParams;
 

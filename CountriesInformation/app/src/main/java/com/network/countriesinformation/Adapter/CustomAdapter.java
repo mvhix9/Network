@@ -58,7 +58,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.DataViewHo
         final Country country = mCountries.get(position);
         holder.txtCountryName.setText(country.getmName());
         final String imgLink = "https://img.geonames.org/flags/l/" + country.getmCode().toLowerCase() + ".gif";
-        Picasso.with(this.mContext).load(imgLink).resize(50,50).into(holder.imgFlag);
+        Picasso.with(this.mContext).load(imgLink).resize(60,36).into(holder.imgFlag);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
